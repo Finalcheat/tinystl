@@ -1,5 +1,5 @@
 #ifndef _VECTOR_UNITTEST_CPP_
-#define _VECTOR_UNITTEST_CPP 1
+#define _VECTOR_UNITTEST_CPP_ 1
 
 #include "gtest/gtest.h"
 #include "vector.hpp"
