@@ -4,7 +4,7 @@ A toy implementation of STL
 
 ## Container
 - [x] vector
-- [ ] array
+- [x] array
 - [ ] list
 - [ ] forward_list
 - [ ] stack

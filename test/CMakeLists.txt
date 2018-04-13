@@ -4,4 +4,6 @@ INCLUDE_DIRECTORIES(../src)
 
 LINK_LIBRARIES(gtest)
 
+ADD_DEFINITIONS(-std=c++11)
+
 ADD_EXECUTABLE(unittest main.cpp)

@@ -1,6 +1,7 @@
 #include "type_traits_unittest.cpp"
 #include "algobase_unittest.cpp"
 #include "vector_unittest.cpp"
+#include "array_unittest.cpp"
 #include "gtest/gtest.h"
 
 
