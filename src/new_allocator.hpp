@@ -2,12 +2,13 @@
 #define _TINYSTL_NEW_ALLOCATOR_HPP_ 1
 
 #include <new>
+#include "stddef.hpp"
 
 
 namespace tinystl {
 
-    using std::size_t;
-    using std::ptrdiff_t;
+    using tinystl::size_t;
+    using tinystl::ptrdiff_t;
 
     template<typename _Tp>
     class new_allocator

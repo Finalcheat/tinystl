@@ -16,7 +16,7 @@ namespace tinystl {
     {
     public:
         typedef _Tp                                        value_type;
-        typedef size_t                                     size_type;
+        typedef tinystl::size_t                            size_type;
         typedef _Tp*                                       pointer;
         typedef const _Tp*                                 const_pointer;
         typedef tinystl::__normal_iterator<pointer>        iterator;
