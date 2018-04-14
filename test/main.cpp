@@ -2,6 +2,7 @@
 #include "algobase_unittest.cpp"
 #include "vector_unittest.cpp"
 #include "array_unittest.cpp"
+#include "stack_unittest.cpp"
 #include "gtest/gtest.h"
 
 

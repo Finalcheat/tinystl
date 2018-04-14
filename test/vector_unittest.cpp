@@ -268,10 +268,10 @@ namespace {
 
         // TNS::vector< TNS::vector<int> >::const_iterator vvit = v_v_int.begin();
         TNS::vector< TNS::vector<int> >::iterator vvit = v_v_int.begin();
-        // for (; vvit != v_v_int.end(); ++vvit)
-        // {
-        //     ASSERT_EQ(*vvit, ref);
-        // }
+        for (; vvit != v_v_int.end(); ++vvit)
+        {
+            ASSERT_EQ(*vvit, ref);
+        }
     }
 
 
