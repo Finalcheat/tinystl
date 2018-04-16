@@ -105,45 +105,6 @@ namespace tinystl {
             _initialize_dispatch(__first, __last, _Type());
         }
 
-        template<typename _Integer>
-        void _initialize_dispatch(_Integer __n, _Integer __value, __true_type)
-        {
-            if (__n)
-            {
-                this->_impl._start = this->_impl.allocate(__n);
-                tinystl::__uninitialized_fill_n_a(this->_impl._start, __n, __value, _get_Tp_alloc());
-                this->_impl._finish = this->_impl._start + __n;
-                this->_impl._end_of_storage = this->_impl._finish;
-            }
-        }
-
-        template<typename _InputIterator>
-        void _initialize_dispatch(_InputIterator __first, _InputIterator __last, __false_type)
-        {
-            typedef typename tinystl::iterator_traits<_InputIterator>::iterator_category _Category;
-            _range_initialize(__first, __last, _Category());
-        }
-
-        template<typename _InputIterator>
-        void _range_initialize(_InputIterator __first, _InputIterator __last, input_iterator_tag)
-        {
-            while (__first != __last)
-            {
-                push_back(*__first);
-                ++__first;
-            }
-        }
-
-        template<typename _ForwardIterator>
-        void _range_initialize(_ForwardIterator __first, _ForwardIterator __last, forward_iterator_tag)
-        {
-            const size_type __n = tinystl::distance(__first, __last);
-            this->_impl._start = this->_impl.allocate(__n);
-            this->_impl._end_of_storage = this->_impl._start + __n;
-            this->_impl._finish = tinystl::__uninitialized_copy_a(__first, __last, this->_impl._start,
-                                                                  _get_Tp_alloc());
-        }
-
         ~vector()
         {
             tinystl::_Destroy(this->_impl._start, this->_impl._finish, _get_Tp_alloc());
@@ -288,43 +249,6 @@ namespace tinystl {
             _fill_assign(__n, __x);
         }
 
-        void _fill_assign(size_type __n, const value_type& __x)
-        {
-            const value_type __x_copy = __x;
-            if (__n >= size())
-            {
-                tinystl::fill_n(this->_impl._start, size(), __x_copy);
-                __n -= size();
-                insert(end(), __n, __x);
-            }
-            else
-            {
-                tinystl::fill_n(this->_impl._start, __n, __x_copy);
-            }
-        }
-
-        template<typename _Integer>
-        void _assign_dispatch(_Integer __n, _Integer __x, __true_type)
-        {
-            _fill_assign(__n, __x);
-        }
-
-        template<typename _InputIterator>
-        void _assign_dispatch(_InputIterator __first, _InputIterator __last, __false_type)
-        {
-            iterator __cur = begin();
-            while (__cur != end() && __first != __last)
-            {
-                *__cur = *__first;
-                ++__cur;
-                ++__first;
-            }
-            if (__first != __last)
-            {
-                insert(end(), __first, __last);
-            }
-        }
-
         template<typename _InputIterator>
         void assign(_InputIterator __first, _InputIterator __last)
         {
@@ -365,44 +289,6 @@ namespace tinystl {
             this->_impl.destroy(this->_impl._finish);
         }
 
-        void _insert_aux(iterator __position, const value_type& __x)
-        {
-            if (this->_impl._finish != this->_impl._end_of_storage)
-            {
-                // 还有剩余空间
-                // 将[__position, end())的内容拷贝到[__position + 1, end() + 1)中
-                // 首先在end()构造元素，因为end()之前未使用，必须对它特殊化处理，其他调用copy即可
-                this->_impl.construct(this->_impl._finish, *(end() - 1));
-                ++this->_impl._finish;
-                const value_type __x_copy = __x;
-                tinystl::copy_backward(__position, end() - 2, end() - 1);
-                *__position = __x_copy;
-            }
-            else
-            {
-                // 空间不足，分配新空间为原空间2倍
-                const size_type __old_size = size();
-                const size_type __new_len = __old_size != 0 ? 2 * __old_size : 1;
-
-                pointer __new_start(this->_impl.allocate(__new_len));
-                pointer __new_finish(__new_start);
-                __new_finish = tinystl::__uninitialized_copy_a(begin(), __position, __new_start,
-                                                               _get_Tp_alloc());
-                this->_impl.construct(__new_finish, __x);
-                ++__new_finish;
-                __new_finish = tinystl::__uninitialized_copy_a(__position, end(), __new_finish,
-                                                               _get_Tp_alloc());
-
-                // 释放旧空间
-                tinystl::_Destroy(begin(), end(), _get_Tp_alloc());
-                this->_impl.deallocate(this->_impl._start, capacity());
-
-                this->_impl._start = __new_start;
-                this->_impl._finish = __new_finish;
-                this->_impl._end_of_storage = __new_start + __new_len;
-            }
-        }
-
         iterator insert(iterator __position, const value_type& __x)
         {
             const size_type __n = tinystl::distance(begin(), __position);
@@ -420,35 +306,9 @@ namespace tinystl {
             return (begin() + __n);
         }
 
-        void _fill_insert(iterator __position, size_type __n, const value_type& __x)
-        {
-            const value_type __x_copy = __x;
-            iterator __cur = __position;
-            for (size_type i = 0; i < __n; ++i)
-            {
-                __position = insert(__position, __x_copy);
-            }
-        }
-
         void insert(iterator __position, size_type __n, const value_type& __x)
         {
             _fill_insert(__position, __n, __x);
-        }
-
-        template<typename _Integer>
-        void _insert_dispatch(iterator __position, _Integer __n, _Integer __x, __true_type)
-        {
-            _fill_insert(__position, __n, __x);
-        }
-
-        template<typename _InputIterator>
-        void _insert_dispatch(iterator __position, _InputIterator __first, _InputIterator __last,
-                              __false_type)
-        {
-            for (; __first != __last; ++__first)
-            {
-                __position = ++insert(__position, *__first);
-            }
         }
 
         template<typename _InputIterator>
@@ -492,6 +352,147 @@ namespace tinystl {
         {
             tinystl::_Destroy(begin(), end(), _get_Tp_alloc());
             this->_impl._finish = this->_impl._start;
+        }
+
+    private:
+        template<typename _Integer>
+        void _initialize_dispatch(_Integer __n, _Integer __value, __true_type)
+        {
+            if (__n)
+            {
+                this->_impl._start = this->_impl.allocate(__n);
+                tinystl::__uninitialized_fill_n_a(this->_impl._start, __n, __value, _get_Tp_alloc());
+                this->_impl._finish = this->_impl._start + __n;
+                this->_impl._end_of_storage = this->_impl._finish;
+            }
+        }
+
+        template<typename _InputIterator>
+        void _initialize_dispatch(_InputIterator __first, _InputIterator __last, __false_type)
+        {
+            typedef typename tinystl::iterator_traits<_InputIterator>::iterator_category _Category;
+            _range_initialize(__first, __last, _Category());
+        }
+
+        template<typename _InputIterator>
+        void _range_initialize(_InputIterator __first, _InputIterator __last, input_iterator_tag)
+        {
+            while (__first != __last)
+            {
+                push_back(*__first);
+                ++__first;
+            }
+        }
+
+        template<typename _ForwardIterator>
+        void _range_initialize(_ForwardIterator __first, _ForwardIterator __last, forward_iterator_tag)
+        {
+            const size_type __n = tinystl::distance(__first, __last);
+            this->_impl._start = this->_impl.allocate(__n);
+            this->_impl._end_of_storage = this->_impl._start + __n;
+            this->_impl._finish = tinystl::__uninitialized_copy_a(__first, __last, this->_impl._start,
+                                                                  _get_Tp_alloc());
+        }
+
+        void _fill_insert(iterator __position, size_type __n, const value_type& __x)
+        {
+            const value_type __x_copy = __x;
+            iterator __cur = __position;
+            for (size_type i = 0; i < __n; ++i)
+            {
+                __position = insert(__position, __x_copy);
+            }
+        }
+
+        template<typename _Integer>
+        void _insert_dispatch(iterator __position, _Integer __n, _Integer __x, __true_type)
+        {
+            _fill_insert(__position, __n, __x);
+        }
+
+        template<typename _InputIterator>
+        void _insert_dispatch(iterator __position, _InputIterator __first, _InputIterator __last,
+                              __false_type)
+        {
+            for (; __first != __last; ++__first)
+            {
+                __position = ++insert(__position, *__first);
+            }
+        }
+
+        void _insert_aux(iterator __position, const value_type& __x)
+        {
+            if (this->_impl._finish != this->_impl._end_of_storage)
+            {
+                // 还有剩余空间
+                // 将[__position, end())的内容拷贝到[__position + 1, end() + 1)中
+                // 首先在end()构造元素，因为end()之前未使用，必须对它特殊化处理，其他调用copy即可
+                this->_impl.construct(this->_impl._finish, *(end() - 1));
+                ++this->_impl._finish;
+                const value_type __x_copy = __x;
+                tinystl::copy_backward(__position, end() - 2, end() - 1);
+                *__position = __x_copy;
+            }
+            else
+            {
+                // 空间不足，分配新空间为原空间2倍
+                const size_type __old_size = size();
+                const size_type __new_len = __old_size != 0 ? 2 * __old_size : 1;
+
+                pointer __new_start(this->_impl.allocate(__new_len));
+                pointer __new_finish(__new_start);
+                __new_finish = tinystl::__uninitialized_copy_a(begin(), __position, __new_start,
+                                                               _get_Tp_alloc());
+                this->_impl.construct(__new_finish, __x);
+                ++__new_finish;
+                __new_finish = tinystl::__uninitialized_copy_a(__position, end(), __new_finish,
+                                                               _get_Tp_alloc());
+
+                // 释放旧空间
+                tinystl::_Destroy(begin(), end(), _get_Tp_alloc());
+                this->_impl.deallocate(this->_impl._start, capacity());
+
+                this->_impl._start = __new_start;
+                this->_impl._finish = __new_finish;
+                this->_impl._end_of_storage = __new_start + __new_len;
+            }
+        }
+
+        void _fill_assign(size_type __n, const value_type& __x)
+        {
+            const value_type __x_copy = __x;
+            if (__n >= size())
+            {
+                tinystl::fill_n(this->_impl._start, size(), __x_copy);
+                __n -= size();
+                insert(end(), __n, __x);
+            }
+            else
+            {
+                tinystl::fill_n(this->_impl._start, __n, __x_copy);
+            }
+        }
+
+        template<typename _Integer>
+        void _assign_dispatch(_Integer __n, _Integer __x, __true_type)
+        {
+            _fill_assign(__n, __x);
+        }
+
+        template<typename _InputIterator>
+        void _assign_dispatch(_InputIterator __first, _InputIterator __last, __false_type)
+        {
+            iterator __cur = begin();
+            while (__cur != end() && __first != __last)
+            {
+                *__cur = *__first;
+                ++__cur;
+                ++__first;
+            }
+            if (__first != __last)
+            {
+                insert(end(), __first, __last);
+            }
         }
 
     private:
