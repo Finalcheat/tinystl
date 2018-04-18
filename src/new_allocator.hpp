@@ -26,10 +26,12 @@ namespace tinystl {
         template<typename _Tp1>
         struct rebind { typedef new_allocator<_Tp1> other; };
 
-        new_allocator() throw() {}
+        new_allocator() throw() { }
+
+        new_allocator(const new_allocator&) throw() { }
 
         template<typename _Tp1>
-        new_allocator(new_allocator<_Tp1>&) throw() {}
+        new_allocator(const new_allocator<_Tp1>&) throw() { }
 
         pointer address(reference __x) const { return &__x; }
 

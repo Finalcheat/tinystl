@@ -24,9 +24,13 @@ namespace tinystl {
         _Iterator _current;
 
     public:
-        __normal_iterator() : _current(_Iterator()) {}
+        __normal_iterator() : _current(_Iterator()) { }
 
-        explicit __normal_iterator(const _Iterator& __i) : _current(__i) {}
+        explicit __normal_iterator(const _Iterator& __i) : _current(__i) { }
+
+        // Allow iterator to const_iterator conversion
+        template<typename _Iterator1>
+        __normal_iterator(const __normal_iterator<_Iterator1>& __i) : _current(__i.base()) { }
 
     public:
         const _Iterator& base() const

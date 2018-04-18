@@ -266,8 +266,8 @@ namespace {
         v_v_int.push_back(v_v_int[0]);
         v_v_int.push_back(ref);
 
-        // TNS::vector< TNS::vector<int> >::const_iterator vvit = v_v_int.begin();
-        TNS::vector< TNS::vector<int> >::iterator vvit = v_v_int.begin();
+        TNS::vector< TNS::vector<int> >::const_iterator vvit = v_v_int.begin();
+        // TNS::vector< TNS::vector<int> >::iterator vvit = v_v_int.begin();
         for (; vvit != v_v_int.end(); ++vvit)
         {
             ASSERT_EQ(*vvit, ref);
