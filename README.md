@@ -6,7 +6,7 @@ A toy implementation of STL
 - [x] vector
 - [x] array
 - [ ] list
-- [ ] forward_list
+- [x] forward_list
 - [x] stack
 - [ ] queue
 - [ ] priority_queue
