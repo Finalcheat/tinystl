@@ -4,6 +4,7 @@
 #include "array_unittest.cpp"
 #include "stack_unittest.cpp"
 #include "forward_list_unittest.cpp"
+#include "list_unittest.cpp"
 #include "gtest/gtest.h"
 
 
