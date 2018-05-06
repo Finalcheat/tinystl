@@ -8,7 +8,7 @@
 
 namespace {
 
-    TEST(forward_list_test, forward_list_test_1)
+    TEST(forward_list_test, forward_list_front_test)
     {
         int arr[] = {1, 2, 3, 4, 5};
         int n = sizeof(arr) / sizeof(int);
@@ -46,7 +46,7 @@ namespace {
         ASSERT_EQ(*(f.begin()), 4);
     }
 
-    TEST(forward_list_test, forward_list_test_2)
+    TEST(forward_list_test, forward_list_constructor_test_1)
     {
         const size_t n = 5;
         TNS::forward_list<int> f(n);
@@ -70,7 +70,7 @@ namespace {
         ASSERT_EQ(j, n);
     }
 
-    TEST(forward_list_test, forward_list_test_3)
+    TEST(forward_list_test, forward_list_insert_after_test)
     {
         TNS::forward_list<int> f;
 
@@ -105,7 +105,7 @@ namespace {
         ASSERT_EQ(i, n);
     }
 
-    TEST(forward_list_test, forward_list_test_4)
+    TEST(forward_list_test, forward_list_erase_after_test)
     {
         int arr[] = {5, 4, 3, 2, 1};
         const size_t n = sizeof(arr) / sizeof(int);
@@ -170,7 +170,7 @@ namespace {
         ASSERT_EQ(iter, f1.end());
     }
 
-    TEST(forward_list_test, forward_list_test_5)
+    TEST(forward_list_test, forward_list_clear_test)
     {
         int arr[] = {5, 4, 3, 2, 1};
         size_t n = sizeof(arr) / sizeof(int);
@@ -210,7 +210,7 @@ namespace {
         ASSERT_EQ(f2_iter, f2.end());
     }
 
-    TEST(forward_list_test, forward_list_test_6)
+    TEST(forward_list_test, forward_list_constructor_test_2)
     {
         int arr[] = {1, 2, 3, 4, 5};
         const size_t n = sizeof(arr) / sizeof(arr[0]);
@@ -224,7 +224,7 @@ namespace {
         ASSERT_EQ(iter, f.end());
     }
 
-    TEST(forward_list_test, forward_list_test_7)
+    TEST(forward_list_test, forward_list_assign_test)
     {
         TNS::forward_list<int> f1;
         const size_t n = 6;
@@ -293,7 +293,7 @@ namespace {
         ASSERT_EQ(iter, f4.end());
     }
 
-    TEST(forward_list_test, forward_list_test_8)
+    TEST(forward_list_test, forward_list_resize_test)
     {
         TNS::forward_list<int> f1;
         f1.resize(5);
@@ -360,7 +360,7 @@ namespace {
         ASSERT_EQ(iter, f1.end());
     }
 
-    TEST(forward_list_test, forward_list_test_9)
+    TEST(forward_list_test, forward_list_swap_test)
     {
         int arr1[] = {1, 2, 3};
         const size_t n1 = sizeof(arr1) / sizeof(arr1[0]);
@@ -412,7 +412,7 @@ namespace {
         ASSERT_EQ(iter2, f2.end());
     }
 
-    TEST(forward_list_test, forward_list_test_10)
+    TEST(forward_list_test, forward_list_remove_test)
     {
         int arr[] = {999, 67, 89, 45, 32, 45, 666};
         const size_t n = sizeof(arr) / sizeof(arr[0]);
@@ -447,7 +447,7 @@ namespace {
         ASSERT_EQ(iter, f2.end());
     }
 
-    TEST(forward_list_test, forward_list_test_11)
+    TEST(forward_list_test, forward_list_unique_test)
     {
         int arr[] = {1, 2, 2, 3, 3, 2, 1, 1, 2};
         const size_t n = sizeof(arr) / sizeof(arr[0]);
@@ -486,7 +486,7 @@ namespace {
         ASSERT_EQ(iter, f2.end());
     }
 
-    TEST(forward_list_test, forward_list_test_12)
+    TEST(forward_list_test, forward_list_merge_test)
     {
         int arr1[] = {0, 1, 2, 3, 4, 5, 9};
         const size_t n1 = sizeof(arr1) / sizeof(arr1[0]);
@@ -540,7 +540,7 @@ namespace {
         ASSERT_EQ(iter, f3.end());
     }
 
-    TEST(forward_list_test, forward_list_test_13)
+    TEST(forward_list_test, forward_list_reverse_test)
     {
         int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         size_t n = sizeof(arr) / sizeof(arr[0]);

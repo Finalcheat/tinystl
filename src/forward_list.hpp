@@ -265,7 +265,8 @@ namespace tinystl {
 
         ~forward_list()
         {
-            _Node* __p = _impl._head;
+            _Node* __p = _impl._head->_next;
+            _put_node(_impl._head);
             while (__p)
             {
                 _Node* __next = __p->_next;
