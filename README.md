@@ -8,7 +8,7 @@ A toy implementation of STL
 - [x] list
 - [x] forward_list
 - [x] stack
-- [ ] queue
+- [x] queue
 - [ ] priority_queue
 - [ ] dueue
 - [ ] map
