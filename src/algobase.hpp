@@ -776,6 +776,14 @@ namespace tinystl {
     }
 
 
+    /**
+     *  @brief  找出第一对元素不匹配的迭代器
+     *  @param  first1       区间1开始
+     *  @param  last1        区间1结束
+     *  @param  first2       区间2开始
+     *  @param  binary_pred  匹配函数
+     *  @return 迭代器pair
+     */
     template<typename _InputIterator1, typename _InputIterator2, typename _BinaryPredicate>
     pair<_InputIterator1, _InputIterator2> mismatch(_InputIterator1 __first1, _InputIterator1 __last1,
                                                     _InputIterator2 __first2, _BinaryPredicate __binary_pred)
@@ -789,6 +797,13 @@ namespace tinystl {
     }
 
 
+    /**
+     *  @brief  比较两个区间是否相等
+     *  @param  first1       区间1开始
+     *  @param  last1        区间1结束
+     *  @param  first2       区间2开始
+     *  @return 相等（true）/ 不相等（false）
+     */
     template<typename _InputIterator1, typename _InputIterator2>
     inline bool equal(_InputIterator1 __first1, _InputIterator1 __last1, _InputIterator2 __first2)
     {
@@ -805,6 +820,14 @@ namespace tinystl {
     }
 
 
+    /**
+     *  @brief  比较两个区间是否相等
+     *  @param  first1       区间1开始
+     *  @param  last1        区间1结束
+     *  @param  first2       区间2开始
+     *  @param  binary_pred  比较函数
+     *  @return 相等（true）/ 不相等（false）
+     */
     template<typename _InputIterator1, typename _InputIterator2, typename _BinaryPredicate>
     inline bool equal(_InputIterator1 __first1, _InputIterator1 __last1,
                       _InputIterator2 __first2, _BinaryPredicate __binary_pred)
@@ -822,6 +845,15 @@ namespace tinystl {
     }
 
 
+    /**
+     *  @brief  字典序比较两个区间
+     *  @param  first1       区间1开始
+     *  @param  last1        区间1结束
+     *  @param  first2       区间2开始
+     *  @param  last2        区间2结束
+     *  @param  comp         比较函数
+     *  @return 小于（true）/ 不小于（false）
+     */
     template<typename _InputIterator1, typename _InputIterator2, typename _Compare>
     bool lexicographical_compare(_InputIterator1 __first1, _InputIterator1 __last1,
                                  _InputIterator2 __first2, _InputIterator2 __last2,
@@ -844,6 +876,14 @@ namespace tinystl {
     }
 
 
+    /**
+     *  @brief  字典序比较两个区间
+     *  @param  first1       区间1开始
+     *  @param  last1        区间1结束
+     *  @param  first2       区间2开始
+     *  @param  last2        区间2结束
+     *  @return 小于（true）/ 不小于（false）
+     */
     inline bool lexicographical_compare(const unsigned char* __first1, const unsigned char* __last1,
                                         const unsigned char* __first2, const unsigned char* __last2)
     {
