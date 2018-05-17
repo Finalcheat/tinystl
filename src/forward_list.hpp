@@ -36,22 +36,38 @@ namespace tinystl {
         __forward_list_iterator(const _Self& __f) : _node(__f._node) { }
 
     public:
+        /**
+         *  @brief  重载*操作符，返回节点值
+         *  @return 对应节点的值
+         */
         reference operator*() const
         {
             return _node->_value;
         }
 
+        /**
+         *  @brief  重载->操作符，返回指向节点值的指针
+         *  @return 指向对应节点值的指针
+         */
         pointer operator->() const
         {
             return &(_node->_value);
         }
 
+        /**
+         *  @brief  重载++操作符，节点往前走一步，返回自身
+         *  @return *this
+         */
         _Self& operator++()
         {
             _node = _node->_next;
             return *this;
         }
 
+        /**
+         *  @brief  重载++操作符，节点往前走一步，返回旧值
+         *  @return 旧值
+         */
         _Self operator++(int)
         {
             __forward_list_node<_Tp> __tmp = *_node;
@@ -59,16 +75,28 @@ namespace tinystl {
             return __tmp;
         }
 
+        /**
+         *  @brief  重载==操作符，判断两迭代器是否相等
+         *  @return true/false
+         */
         bool operator==(const _Self& __f) const
         {
             return _node == __f._node;
         }
 
+        /**
+         *  @brief  重载!=操作符，判断两迭代器是否不相等
+         *  @return true/false
+         */
         bool operator!=(const _Self& __f) const
         {
             return _node != __f._node;
         }
 
+        /**
+         *  @brief  返回迭代器底部的node节点
+         *  @return node节点
+         */
         _Node* base() const
         {
             return _node;
@@ -101,22 +129,38 @@ namespace tinystl {
         __forward_list_const_iterator(const __forward_list_iterator<_Tp>& __f) : _node(__f.base()) { }
 
     public:
+        /**
+         *  @brief  重载*操作符，返回节点值
+         *  @return 对应节点的值
+         */
         reference operator*() const
         {
             return _node->_value;
         }
 
+        /**
+         *  @brief  重载->操作符，返回指向节点值的指针
+         *  @return 指向对应节点值的指针
+         */
         pointer operator->() const
         {
             return &(_node->_value);
         }
 
+        /**
+         *  @brief  重载++操作符，节点往前走一步，返回自身
+         *  @return *this
+         */
         _Self& operator++()
         {
             _node = _node->_next;
             return *this;
         }
 
+        /**
+         *  @brief  重载++操作符，节点往前走一步，返回旧值
+         *  @return 旧值
+         */
         _Self operator++(int)
         {
             _Node* __tmp = _node;
@@ -124,16 +168,28 @@ namespace tinystl {
             return _Self(__tmp);
         }
 
+        /**
+         *  @brief  重载==操作符，判断两迭代器是否相等
+         *  @return true/false
+         */
         bool operator==(const _Self& __f) const
         {
             return _node == __f._node;
         }
 
+        /**
+         *  @brief  重载!=操作符，判断两迭代器是否不相等
+         *  @return true/false
+         */
         bool operator!=(const _Self& __f) const
         {
             return _node != __f._node;
         }
 
+        /**
+         *  @brief  返回迭代器底部的node节点
+         *  @return node节点
+         */
         const _Node* base() const
         {
             return _node;
@@ -168,16 +224,28 @@ namespace tinystl {
             _forward_list_impl(const _Node_alloc_type& __a) : _Node_alloc_type(__a), _head(0) { }
         };
 
+        /**
+         *  @brief  返回Tp类型的内存分配器
+         *  @return Tp类型内存分配器
+         */
         _Tp_alloc_type _get_Tp_alloc() const
         {
             return _Tp_alloc_type(_get_Node_alloc());
         }
 
+        /**
+         *  @brief  返回Node节点类型的内存分配器
+         *  @return Node节点类型内存分配器
+         */
         _Node_alloc_type& _get_Node_alloc()
         {
             return *static_cast<_Node_alloc_type*>(&this->_impl);
         }
 
+        /**
+         *  @brief  返回Node节点类型的内存分配器
+         *  @return Node节点类型内存分配器
+         */
         const _Node_alloc_type& _get_Node_alloc() const
         {
             return *static_cast<const _Node_alloc_type*>(&this->_impl);
@@ -186,16 +254,30 @@ namespace tinystl {
     protected:
         typedef __forward_list_node<_Tp>  _Node;
 
+        /**
+         *  @brief  分配1个Node节点的内存空间
+         *  @return 指向新分配的Node节点指针
+         */
         _Node* _get_node()
         {
             return _impl._Node_alloc_type::allocate(1);
         }
 
+        /**
+         *  @brief  释放Node节点的内存空间
+         *  @param  p    需要释放的Node节点指针
+         *  @return 无
+         */
         void _put_node(_Node* __p)
         {
             _impl._Node_alloc_type::deallocate(__p, 1);
         }
 
+        /**
+         *  @brief  根据v的值构造1个Node节点
+         *  @param  n    需要构造的值
+         *  @return 指向新构造的Node节点指针
+         */
         _Node* _create_node(const value_type& __v)
         {
             _Node* __p = this->_get_node();
@@ -203,6 +285,10 @@ namespace tinystl {
             return __p;
         }
 
+        /**
+         *  @brief  初始化头部（哨子）节点，内部用
+         *  @return 无
+         */
         void _init_head_node()
         {
             _Node* __p = this->_get_node();
@@ -277,64 +363,116 @@ namespace tinystl {
         }
 
     public:
+        /**
+         *  @brief  返回头部（哨子）节点的迭代器
+         *  @return 哨子节点迭代器
+         */
         iterator before_begin()
         {
             return iterator(_impl._head);
         }
 
+        /**
+         *  @brief  返回头部（哨子）节点的迭代器
+         *  @return 哨子节点迭代器
+         */
         const_iterator before_begin() const
         {
             return const_iterator(_impl._head);
         }
 
+        /**
+         *  @brief  返回外部可用的首节点的迭代器
+         *  @return 首节点迭代器
+         */
         iterator begin()
         {
             return iterator((_impl._head)->_next);
         }
 
+        /**
+         *  @brief  返回外部可用的首节点的迭代器
+         *  @return 首节点迭代器
+         */
         const_iterator begin() const
         {
             return const_iterator((_impl._head)->_next);
         }
 
+        /**
+         *  @brief  返回尾节点的迭代器
+         *  @return 尾节点迭代器
+         */
         iterator end()
         {
             return iterator(0);
         }
 
+        /**
+         *  @brief  返回尾节点的迭代器
+         *  @return 尾节点迭代器
+         */
         const_iterator end() const
         {
             return const_iterator(0);
         }
 
     public:
+        /**
+         *  @brief  判断容器是否为空
+         *  @return true/false
+         */
         bool empty() const
         {
             return _impl._head->_next == 0;
         }
 
+        /**
+         *  @brief  返回容器节点的最大数量
+         *  @return 节点最大数量
+         */
         size_type max_size() const
         {
             return _get_Tp_alloc().max_size();
         }
 
     public:
+        /**
+         *  @brief  返回外部可用的首节点值
+         *  @return 首节点值
+         */
         reference front()
         {
             return _impl._head->_next->_value;
         }
 
+        /**
+         *  @brief  返回外部可用的首节点值
+         *  @return 首节点值
+         */
         const_reference front() const
         {
             return _impl._head->_next->_value;
         }
 
     public:
+        /**
+         *  @brief  填充n个v元素
+         *  @param  n    数量
+         *  @param  v    填充的元素
+         *  @return 无
+         */
         void assign(size_type __n, const value_type& __v)
         {
             _assign(__n, __v);
         }
 
+        /**
+         *  @brief  填充[first, last)的元素
+         *  @param  first    区间开始
+         *  @param  last     区间结束
+         *  @return 无
+         */
         template<typename _InputIterator>
         void assign(_InputIterator __first, _InputIterator __last)
         {
@@ -342,6 +480,11 @@ namespace tinystl {
             return _assign_dispatch(__first, __last, _Type());
         }
 
+        /**
+         *  @brief  往链表头部插入新元素v
+         *  @param  v    元素
+         *  @return 无
+         */
         void push_front(const value_type& __v)
         {
             _Node* __p = _create_node(__v);
@@ -349,6 +492,10 @@ namespace tinystl {
             _impl._head->_next = __p;
         }
 
+        /**
+         *  @brief  移除链表头部元素
+         *  @return 无
+         */
         void pop_front()
         {
             _Node* __first = _impl._head->_next;
@@ -359,6 +506,12 @@ namespace tinystl {
             _put_node(__first);
         }
 
+        /**
+         *  @brief  position节点后插入新元素v
+         *  @param  position    节点迭代器
+         *  @param  v           元素
+         *  @return 新元素的迭代器
+         */
         iterator insert_after(const_iterator __position, const value_type& __v)
         {
             _Node* __p = _create_node(__v);
@@ -369,6 +522,13 @@ namespace tinystl {
             return iterator(__p);
         }
 
+        /**
+         *  @brief  position节点后插入n个新元素v
+         *  @param  position    节点迭代器
+         *  @param  n           数量
+         *  @param  v           元素
+         *  @return position + n
+         */
         iterator insert_after(const_iterator __position, size_type __n, const value_type& __v)
         {
             for (; __n > 0; --__n)
@@ -378,6 +538,13 @@ namespace tinystl {
             return iterator((_Node*)(__position.base()));
         }
 
+        /**
+         *  @brief  position节点后插入[first, last)区间内的元素
+         *  @param  position    节点迭代器
+         *  @param  first       区间开始
+         *  @param  last        区间结束
+         *  @return position + (last - first)
+         */
         template<typename _InputIterator>
         iterator insert_after(const_iterator __position, _InputIterator __first, _InputIterator __last)
         {
@@ -385,6 +552,11 @@ namespace tinystl {
             return _insert_after_dispatch(__position, __first, __last, _Type());
         }
 
+        /**
+         *  @brief  删除position节点的下一个节点
+         *  @param  position    节点迭代器
+         *  @return position的下一个节点
+         */
         iterator erase_after(const_iterator __position)
         {
             _Node* __p = (_Node*)(__position.base());
@@ -398,6 +570,12 @@ namespace tinystl {
             return iterator(__p->_next);
         }
 
+        /**
+         *  @brief  删除(position, last)区间的节点
+         *  @param  position    节点迭代器
+         *  @param  last        区间结束
+         *  @return last
+         */
         iterator erase_after(const_iterator __position, const_iterator __last)
         {
             const_iterator __position_copy = __position;
@@ -408,16 +586,32 @@ namespace tinystl {
             return iterator((_Node*)(__last.base()));
         }
 
+        /**
+         *  @brief  与另一个容器f交换
+         *  @param  f    容器
+         *  @return 无
+         */
         void swap(forward_list& __f)
         {
             tinystl::swap(before_begin().base()->_next, __f.before_begin().base()->_next);
         }
 
+        /**
+         *  @brief  调整容器的大小为n
+         *  @param  n    大小
+         *  @return 无
+         */
         void resize(size_type __n)
         {
             resize(__n, value_type());
         }
 
+        /**
+         *  @brief  调整容器的大小为n，如果大于原有空间，插入；否则删除
+         *  @param  n    大小
+         *  @param  v    元素
+         *  @return 无
+         */
         void resize(size_type __n, const value_type& __v)
         {
             iterator __prev = before_begin();
@@ -435,6 +629,10 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  清除容器中内容
+         *  @return 无
+         */
         void clear()
         {
             erase_after(before_begin(), end());
@@ -448,6 +646,11 @@ namespace tinystl {
         // void splice_after(const_iterator __position, forward_list& __f,
         //                   const_iterator __first, const_iterator __last);
 
+        /**
+         *  @brief  删除容器内所有元素为v的节点
+         *  @param  v    元素
+         *  @return 无
+         */
         void remove(const value_type& __v)
         {
             const value_type __v_copy = __v;
@@ -467,6 +670,11 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  删除容器内所有pred(元素)==true的节点
+         *  @param  pred    函数对象
+         *  @return 无
+         */
         template<typename _Predicate>
         void remove_if(_Predicate __pred)
         {
@@ -486,6 +694,10 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  相邻元素重复的节点变唯一
+         *  @return 无
+         */
         void unique()
         {
             const_iterator __next = begin();
@@ -499,6 +711,11 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  相邻元素符合条件的节点变唯一
+         *  @param  p    函数对象
+         *  @return 无
+         */
         template<typename _BinaryPredicate>
         void unique(_BinaryPredicate __binary_pred)
         {
@@ -513,6 +730,11 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  合并容器f的内容，当前容器内容和f的内容都是按字典序排序好的，合并后保持排序状态
+         *  @param  f    容器
+         *  @return 无
+         */
         void merge(forward_list& __f)
         {
             const_iterator __prev = before_begin();
@@ -540,6 +762,12 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  合并容器f的内容，当前容器内容和f的内容都是已排序，合并后保持排序状态
+         *  @param  f       容器
+         *  @param  comp    比较大小函数对象
+         *  @return 无
+         */
         template<typename _Compare>
         void merge(forward_list& __f, _Compare __comp)
         {
@@ -573,6 +801,10 @@ namespace tinystl {
         // template<typename _Compare>
         // void sort(_Compare __comp);
 
+        /**
+         *  @brief  反转单链表
+         *  @return 无
+         */
         void reverse()
         {
             _Node* __p = begin().base();
@@ -592,6 +824,13 @@ namespace tinystl {
         }
 
     protected:
+        /**
+         *  @brief  insert_after分发之一
+         *  @param  position    节点迭代器
+         *  @param  n           数量
+         *  @param  v           元素
+         *  @return position + n
+         */
         template<typename _Integer>
         iterator _insert_after_dispatch(const_iterator __position, _Integer __n, _Integer __v, __true_type)
         {
@@ -602,6 +841,13 @@ namespace tinystl {
             return iterator((_Node*)(__position.base()));
         }
 
+        /**
+         *  @brief  insert_after分发之一
+         *  @param  position    节点迭代器
+         *  @param  first       区间开始
+         *  @param  last        区间结束
+         *  @return position + (last - first)
+         */
         template<typename _InputIterator>
         iterator _insert_after_dispatch(const_iterator __position, _InputIterator __first,
                                         _InputIterator __last, __false_type)
@@ -613,6 +859,12 @@ namespace tinystl {
             return iterator((_Node*)(__position.base()));
         }
 
+        /**
+         *  @brief  填充n个v元素
+         *  @param  n    数量
+         *  @param  v    填充的元素
+         *  @return 无
+         */
         void _assign(size_type __n, const value_type& __v)
         {
             const value_type __v_copy = __v;
@@ -632,12 +884,24 @@ namespace tinystl {
             }
         }
 
+        /**
+         *  @brief  assign分发之一
+         *  @param  n    数量
+         *  @param  v    填充的元素
+         *  @return 无
+         */
         template<typename _Integer>
         void _assign_dispatch(_Integer __n, _Integer __v, __true_type)
         {
             _assign(__n, __v);
         }
 
+        /**
+         *  @brief  assign分发之一
+         *  @param  first    区间开始
+         *  @param  last     区间结束
+         *  @return 无
+         */
         template<typename _InputIterator>
         void _assign_dispatch(_InputIterator __first, _InputIterator __last, __false_type)
         {
